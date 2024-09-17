@@ -60,7 +60,7 @@ Before you begin, ensure you have met the following requirements:
 
 ## Testing
 
-1. Run tests using Jest
+1. **Run tests** using Jest
    ```bash
    npm test
    ```
