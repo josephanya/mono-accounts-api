@@ -27,8 +27,9 @@ export default class TransactionService {
             await recipientAccount.save({ session });
             const senderTransaction = new Transaction({
                 amount,
-                sender: senderAccount._id,
-                recipient: recipientAccount._id,
+                account_number: sender_account_number,
+                sender_id: senderAccount._id,
+                recipient_id: recipientAccount._id,
                 type: 'debit',
                 balance: senderAccount.balance,
                 currency: 'NGN',
@@ -38,8 +39,9 @@ export default class TransactionService {
             await senderTransaction.save({ session });
             const recipientTransaction = new Transaction({
                 amount,
-                sender: senderAccount._id,
-                recipient: recipientAccount._id,
+                account_number: recipient_account_number,
+                sender_id: senderAccount._id,
+                recipient_id: recipientAccount._id,
                 type: 'credit',
                 balance: recipientAccount.balance,
                 currency: 'NGN',
@@ -61,12 +63,11 @@ export default class TransactionService {
         }
     }; 
 
-    getTransactions = async (page: number, limit: number, accountId: any) => {
+    getTransactions = async (page: number, limit: number, account_number: any) => {
         try {
             const transactions = await Transaction.find({
                 $or: [
-                  { sender: accountId },
-                  { recipient: accountId },
+                  { account_number },
                 ],
               })
                 .sort({ 'date': -1 })
@@ -74,8 +75,7 @@ export default class TransactionService {
                 .limit(limit * 1);
             const count = await Transaction.countDocuments({
                 $or: [
-                  { sender: accountId },
-                  { recipient: accountId },
+                  { account_number },
                 ],
               });
             return {

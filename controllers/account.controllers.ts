@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import UserService from "../services/user.service";
-import AuthService from "../services/auth.service";
 import CustomResponse from "../helpers/response"
 import statusCode from "../helpers/status_codes"
 import AccountService from "../services/account.service";
@@ -10,12 +9,10 @@ const logger = pino();
 
 class AccountControllers {
     private userService: UserService;
-    private authService: AuthService;
     private accountService: AccountService;
 
     constructor() {
         this.userService = new UserService();
-        this.authService = new AuthService();
         this.accountService = new AccountService();
     }
 
@@ -25,9 +22,9 @@ class AccountControllers {
             const user = await this.userService.getUserById(user_id)
             await this.accountService.checkUserAccountLimit(user);
             const account = await this.accountService.createAccount(user);
-            return CustomResponse.success(res, statusCode.success, 'account created successfully', { account_number: account.account_number, user_id: user._id });
+            return CustomResponse.success(res, statusCode.created, 'account created successfully', { account_number: account.account_number, user_id: user._id });
         } catch (e) {
-            logger.error(e)
+            logger.error(e instanceof Error ? e.message : 'an unknown error occurred');
             next(e);
         }
     }
@@ -38,7 +35,7 @@ class AccountControllers {
             const user = await this.accountService.getUserByAccountNumber(account_number);
             return CustomResponse.success(res, statusCode.success, 'user fetched successfully', { user });
         } catch (e) {
-            logger.error(e)
+            logger.error(e instanceof Error ? e.message : 'an unknown error occurred');
             next(e);
         }
     }
@@ -50,7 +47,7 @@ class AccountControllers {
             const accounts = await this.accountService.getAccounts(user_id)
             return CustomResponse.success(res, statusCode.success, 'user fetched successfully', { accounts });
         } catch (e) {
-            
+            next(e)
         }
     }
 }

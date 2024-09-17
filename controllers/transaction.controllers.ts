@@ -23,7 +23,7 @@ class TransactionControllers {
             const transaction = await this.transactionService.sendMoney(sender_account_number, user_id, recipient_account_number, amount, narration)
             return CustomResponse.success(res, statusCode.success, 'transfer successful', { transaction });
         } catch (e) {
-            logger.error(e);
+            logger.error(e instanceof Error ? e.message : 'an unknown error occurred');
             next(e);
         }
     }
@@ -35,8 +35,7 @@ class TransactionControllers {
         const limit = parseInt(req.query.limit as string) || 10;
         try {
             await this.accountService.checkAccount(account_number, user_id)
-            const accountId = await this.accountService.getAccountId(account_number)
-            const transactions = await this.transactionService.getTransactions(page, limit, accountId)
+            const transactions = await this.transactionService.getTransactions(page, limit, account_number)
             return CustomResponse.success(res, statusCode.success, 'transactions fetched successfully', transactions);
         } catch (e) {
             next(e)

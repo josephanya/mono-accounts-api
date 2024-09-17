@@ -26,9 +26,9 @@ class AuthControllers {
             const auth_token = utils.generateAuthToken(user);
             await this.authService.saveLastLogin(user.email);
             await this.accountService.createAccount(user);
-            return CustomResponse.success(res, statusCode.success, 'user creation successful', { auth_token, user_id: user._id });
+            return CustomResponse.success(res, statusCode.created, 'user creation successful', { auth_token, user_id: user._id });
         } catch (e) {
-            logger.error(e);
+            logger.error(e instanceof Error ? e.message : 'an unknown error occurred');
             next(e);
         }
     }
@@ -42,7 +42,7 @@ class AuthControllers {
             await this.authService.saveLastLogin(user.email);
             return CustomResponse.success(res, statusCode.success, 'login successful', { auth_token, user_id: user._id });
         } catch (e) {
-            logger.error(e);
+            logger.error(e instanceof Error ? e.message : 'an unknown error occurred');
             next(e);
         }
     }

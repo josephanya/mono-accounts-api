@@ -25,15 +25,14 @@ export default class AccountService {
         try {
             const accountCount = await Account.countDocuments({ user: user._id });
             if (accountCount >= 4) {
-                console.log('hello');
-                throw new BaseError('user has reached the maximum limit of accounts', statusCode.notFound);
+                throw new BaseError('user has reached the maximum limit of accounts', statusCode.conflict);
             }
             return true;
         } catch (e) {
             if (e instanceof Error) {
-                throw new BaseError(e.message, statusCode.notFound);
+                throw new BaseError(e.message, statusCode.conflict);
             } else {
-                throw new BaseError('error checking account limit', statusCode.notFound);
+                throw new BaseError('error checking account limit', statusCode.conflict);
             }
         }
     };
@@ -67,22 +66,6 @@ export default class AccountService {
             return true;
         } catch (e) {
             throw new BaseError('access denied: account does not belong to the user', statusCode.notFound);
-        }
-    }
-
-    getAccountId = async (account_number: string) => {
-        try {
-            const account = await Account.findOne({ account_number });
-            if (!account) {
-                throw new BaseError('account does not exist', statusCode.notFound);
-            }
-            return account._id;
-        } catch (e) {
-            if (e instanceof Error) {
-                throw new BaseError(e.message, statusCode.notFound);
-            } else {
-                throw new BaseError('could not retrieve account', statusCode.notFound);
-            }
         }
     }
 

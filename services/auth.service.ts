@@ -7,7 +7,7 @@ export default class AuthService {
     verifyPassword = async (password: string, user: any) => {
         const passwordMatch = utils.comparePassword(password, user.password);
         if (!passwordMatch) {
-            throw new BaseError('invalid password', statusCode.notFound);
+            throw new BaseError('invalid password', statusCode.unAuthorized);
         }
         return true
     }

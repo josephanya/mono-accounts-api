@@ -13,6 +13,11 @@ const transactionSchema = new Schema({
         type: Number,
         required: true,
     },
+    account_number: {
+        type: String,
+        required: true,
+        length: 10
+    },
     description: {
         type: String,
         required: true,
@@ -26,11 +31,11 @@ const transactionSchema = new Schema({
     balance: {
         type: Number
     },
-    sender: {
+    sender_id: {
         type: Schema.Types.ObjectId,
         ref: 'account'
     },
-    recipient: {
+    recipient_id: {
         type: Schema.Types.ObjectId,
         ref: 'account'
     },

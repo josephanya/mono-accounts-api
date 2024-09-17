@@ -2,7 +2,6 @@ import 'dotenv/config';
 
 import express from 'express';
 import bodyParser from 'body-parser';
-import './config/database.connect';
 import errorHandler from './middleware/errorHandler';
 import limiter from './middleware/rateLimiter';
 import indexRoutes from './routes/index.routes';
