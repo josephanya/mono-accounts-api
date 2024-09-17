@@ -58,6 +58,13 @@ Before you begin, ensure you have met the following requirements:
    http://localhost:3000
    ```
 
+## Testing
+
+1. Run tests using Jest
+   ```bash
+   npm test
+   ```
+
 ## Additional Information
 
 - Ensure that MongoDB is running before starting the application.
